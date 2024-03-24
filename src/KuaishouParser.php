@@ -161,13 +161,29 @@ class KuaishouParser extends ModuleBase
 		}
 
 		$pu = parse_url($url);
-		if(isset($pu['path']) && !empty($pu['path'])) {
-			$saveName = explode('/', $pu['path']);
-			$saveName = end($saveName);
-		} else {
-			$status = '无法通过URL设置文件名!';
-		}
 
+        if(!empty($saveName)) 
+        {
+            if(isset($pu['path']) && !empty($pu['path'])) {
+                $filesuf = explode('/', $pu['path']);
+                $filesuf = end($filesuf);
+                $filesuf = explode('.', $filesuf);
+                $filesuf = end($filesuf);
+                $saveName = $saveName . '.' . $filesuf;
+                } else {
+                    $status = '无法通过URL设置文件名!';
+                }
+
+        }
+        else{ 
+            if(isset($pu['path']) && !empty($pu['path'])) {
+            $saveName = explode('/', $pu['path']);
+            $saveName = end($saveName);
+            } else {
+                $status = '无法通过URL设置文件名!';
+            }
+        }
+        
 		if(!isset($pu['host']) || !\owo\str_is_domain($pu['host'])) {
 			$status = '无效的网址!';
 			return false;
@@ -194,6 +210,8 @@ class KuaishouParser extends ModuleBase
 	public function download(string $url, string $savePath, string $saveName = '') : bool
 	{
 		$this->getLogger()->debug('正在下载: ' . $url);
+        $this->getLogger()->debug('savePath: ' . $savePath);
+        $this->getLogger()->debug('saveName: ' . $saveName);
 		if(!$this->saveFile($url, $savePath, $saveName, $status)) {
 			$this->getLogger()->error(rtrim('保存失败! ' . ($status ?? '')));
             return false;

@@ -265,8 +265,9 @@ class WwwQuery extends QueryAbstract
             "作品描述: §r{$caption}§w" . PHP_EOL .
             "标签: §r{$tags}§w" . PHP_EOL .
             $line . PHP_EOL);
-            $_savePath = $savePath . $feed->id . DIRECTORY_SEPARATOR;
-            $__ = $this->module->download($feed->photoUrl, $_savePath);
+           // $_savePath = $savePath . $feed->id . DIRECTORY_SEPARATOR;
+           $_savePath = $savePath . 'www_video' . DIRECTORY_SEPARATOR;
+            $__ = $this->module->download($feed->photoUrl, $_savePath,$feed->id);
             $_  = is_null($_) ? $__ : $_ && $__;
         }
         \owo\open($savePath . $this->principalId);
